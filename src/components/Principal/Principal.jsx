@@ -228,7 +228,7 @@ class Principal extends React.Component {
             <div className="card">
               <h3>Créditos</h3>
               <p>
-                A máquina de criar música foi construída pelo Aluno Almir
+                A máquina de criar música (Pianotopia) foi construída pelo aluno Almir
                 Crispiniano na disciplina Computação e Música do curso de
                 Ciencia da Computação - UFCG
               </p>
