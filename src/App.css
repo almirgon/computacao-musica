@@ -24,7 +24,20 @@ body {
 }
 
 .dockbar{
-  margin-left: 2rem;
+  margin-left: 4rem;
+  margin-top: 1rem;
+}
+
+.pause:hover{
+  fill: #feca1f !important;
+}
+
+.play:hover{
+  fill: greenyellow !important;
+}
+
+.back:hover{
+  fill: #ff4122 !important;
 }
 
 .ReactPiano__Keyboard{

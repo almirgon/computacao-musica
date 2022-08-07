@@ -20,9 +20,9 @@ const Tutorial = () => {
             <li>
               <ul>1. Essa ferramenta utiliza notas de piano para simular e criar melodias</ul> 
               <ul>2. Voce poderá utilizar as teclas do seu teclado ou o seu mouse para clicar em cada tecla apresentada na tela</ul> 
-              <ul>3. O botão <strong>Tocar</strong> irá reproduzir as teclas clicadas em formato de melodia</ul> 
-              <ul>4. O botão <strong>Parar</strong> irá parar de reproduzir a melodia</ul>
-              <ul>5. O botão <strong>Recomeçar</strong> irá apagar a melodia criada, assim permitindo a criação de uma nova</ul>
+              <ul>3. O botão <strong>Tocar</strong> ▶️ irá reproduzir as teclas clicadas em formato de melodia</ul> 
+              <ul>4. O botão <strong>Parar</strong> ⏸️ irá parar de reproduzir a melodia</ul>
+              <ul>5. O botão <strong>Recomeçar</strong> 🔁 irá apagar a melodia criada, assim permitindo a criação de uma nova</ul>
               <ul>7. Ao lado será possivel ver um exemplo de melodia para te auxiliar no uso da ferramenta</ul>
               <ul>8. Por se tratar de um piano virtual, cada tecla do teclado representa uma nota real do piano (A tabela estará disponível na próxima página)</ul>
               <ul>9. O design do piano da aplicação é diferente do tradicional, pois foi utilizado a criatividade e o poder das ferramentas de software para criar algo diferente, mas que mantém a funcionalidade tradicional</ul>

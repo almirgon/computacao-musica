@@ -1,19 +1,24 @@
-import React from 'react';
-import _ from 'lodash';
-import {KeyboardShortcuts, MidiNumbers } from 'react-piano';
-import 'react-piano/dist/styles.css';
+import React from "react";
+import _ from "lodash";
+import {KeyboardShortcuts, MidiNumbers} from "react-piano";
+import "react-piano/dist/styles.css";
 
-import SoundfontProvider from '../Soundfont/SoundfontProvider';
-import PianoWithRecording from '../Piano/PianoWithRecording';
-import Button from '../Button/Button';
-import { Navigate } from "react-router-dom"
+import SoundfontProvider from "../Soundfont/SoundfontProvider";
+import PianoWithRecording from "../Piano/PianoWithRecording";
+import Button from "../Button/Button";
+import {Navigate} from "react-router-dom";
+import {ReactComponent as Play} from "../../assets/icons/play.svg";
+import {ReactComponent as Pause} from "../../assets/icons/pause.svg";
+import {ReactComponent as Back} from "../../assets/icons/back.svg";
+import {Tooltip} from "react-tippy";
+import "react-tippy/dist/tippy.css";
 
 const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-const soundfontHostname = 'https://d1pzp51pvbm36p.cloudfront.net';
+const soundfontHostname = "https://d1pzp51pvbm36p.cloudfront.net";
 
 const noteRange = {
-  first: MidiNumbers.fromNote('c3'),
-  last: MidiNumbers.fromNote('e4'),
+  first: MidiNumbers.fromNote("c3"),
+  last: MidiNumbers.fromNote("e4"),
 };
 const keyboardShortcuts = KeyboardShortcuts.create({
   firstNote: noteRange.first,
@@ -24,12 +29,12 @@ const keyboardShortcuts = KeyboardShortcuts.create({
 class Principal extends React.Component {
   state = {
     recording: {
-      mode: 'RECORDING',
+      mode: "RECORDING",
       events: [],
       currentTime: 0,
       currentEvents: [],
     },
-    redirect:false
+    redirect: false,
   };
 
   constructor(props) {
@@ -55,7 +60,7 @@ class Principal extends React.Component {
 
   onClickPlay = () => {
     this.setRecording({
-      mode: 'PLAYING',
+      mode: "PLAYING",
     });
     const startAndEndTimes = _.uniq(
       _.flatMap(this.state.recording.events, event => [
@@ -86,7 +91,7 @@ class Principal extends React.Component {
       clearTimeout(scheduledEvent);
     });
     this.setRecording({
-      mode: 'RECORDING',
+      mode: "RECORDING",
       currentEvents: [],
     });
   };
@@ -95,7 +100,7 @@ class Principal extends React.Component {
     this.onClickStop();
     this.setRecording({
       events: [],
-      mode: 'RECORDING',
+      mode: "RECORDING",
       currentEvents: [],
       currentTime: 0,
     });
@@ -103,90 +108,145 @@ class Principal extends React.Component {
 
   render() {
     return (
-      <section className="page"><div className={"imageContent"}>
-      <SoundfontProvider
-        instrumentName="acoustic_grand_piano"
-        audioContext={audioContext}
-        hostname={soundfontHostname}
-        render={({ isLoading, playNote, stopNote }) => (
-          <PianoWithRecording
-            recording={this.state.recording}
-            setRecording={this.setRecording}
-            noteRange={noteRange}
-            width={300}
-            playNote={playNote}
-            stopNote={stopNote}
-            disabled={isLoading}
-            keyboardShortcuts={keyboardShortcuts}
+      <section className="page">
+        <div className={"imageContent"}>
+          <SoundfontProvider
+            instrumentName="acoustic_grand_piano"
+            audioContext={audioContext}
+            hostname={soundfontHostname}
+            render={({isLoading, playNote, stopNote}) => (
+              <PianoWithRecording
+                recording={this.state.recording}
+                setRecording={this.setRecording}
+                noteRange={noteRange}
+                width={300}
+                playNote={playNote}
+                stopNote={stopNote}
+                disabled={isLoading}
+                keyboardShortcuts={keyboardShortcuts}
+              />
+            )}
           />
-        )}
-      />
-    <div className='dockbar'>
-      <Button style={{borderRadius: '0px', background: 'green',  "&hover": {
-      transform: 'scale(1)'
-    }}} onClick={this.onClickPlay}>Tocar</Button>
-      <Button style={{borderRadius: '0px', background: 'yellow'}} onClick={this.onClickStop}>Parar</Button>
-      <Button style={{borderRadius: '0px', background: 'red'}} onClick={this.onClickClear}>Recomeçar</Button>
-    </div>
-
-  </div> <div className={"content"}>
-      <h1 style={{marginBottom: '0.5rem'}} className={` animate__animated animate__bounce animate__delay-1s`} > Vamos lá </h1>
-        <div className="centralize animate__animated animate__zoomIn animate__delay-1s">
-          <div className="card">
-            <h3>Tabela de notas: Tecla do Computador {'>'} Piano(Nº.Midi)</h3>
-            <div style={{display: 'flex', justifyContent: 'space-around', textAlign: 'left'}}><li>
-              <ul>Tecla A = C3 (48) </ul> 
-              <ul>Tecla W = C3# (49) </ul> 
-              <ul>Tecla S = D3 (50) </ul> 
-              <ul>Tecla E = D3# (51) </ul> 
-              <ul>Tecla D = E3 (52) </ul> 
-              <ul>Tecla F = F3 (53) </ul> 
-              <ul>Tecla T = F3# (54) </ul> 
-              <ul>Tecla G = G3 (55) </ul> 
-              <ul>Tecla Y = G3# (56) </ul> 
-            </li>
-            <li>
-              <ul>Tecla H = A3 (57) </ul> 
-              <ul>Tecla U = A3# (58) </ul> 
-              <ul>Tecla J = B3 (59) </ul> 
-              <ul>Tecla K = C4 (60) </ul> 
-              <ul>Tecla O = C4# (61) </ul> 
-              <ul>Tecla L = D4 (62) </ul> 
-              <ul>Tecla P = D4# (63) </ul> 
-              <ul>Tecla ; = E4 (64)</ul> 
-            </li></div>
-            
+          <div className="dockbar">
+            <Tooltip title="Parar" position="bottom">
+              <Pause
+                className="pause"
+                tooltip="oi"
+                style={{cursor: "pointer", fill: "white", transition: '0.2s'}}
+                onClick={this.onClickStop}
+              >
+                Parar
+              </Pause>
+            </Tooltip>
+            <Tooltip title="Tocar" position="bottom">
+              {" "}
+              <Play
+                className="play"
+                style={{cursor: "pointer", fill: "white", transition: '0.2s'}}
+                onClick={this.onClickPlay}
+              >
+                Tocar
+              </Play>
+            </Tooltip>
+            <Tooltip title="Recomeçar" position="bottom">
+              {" "}
+              <Back
+                className="back"
+                style={{cursor: "pointer", fill: "white", transition: '0.2s'}}
+                onClick={this.onClickClear}
+              >
+                Recomeçar
+              </Back>
+            </Tooltip>
           </div>
+        </div>{" "}
+        <div style={{marginBottom: '2rem', marginTop: '2rem'}} className={"content"}>
+          <h1
+            style={{marginBottom: "0.5rem"}}
+            className={` animate__animated animate__bounce animate__delay-1s`}
+          >
+            {" "}
+            Vamos lá{" "}
+          </h1>
+          <div className="centralize animate__animated animate__zoomIn animate__delay-1s">
+            <div className="card">
+              <h3>Tabela de notas: Tecla do Computador {">"} Piano(Nº.Midi)</h3>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-around",
+                  textAlign: "left",
+                }}
+              >
+                <li>
+                  <ul>Tecla A = C3 (48) </ul>
+                  <ul>Tecla W = C3# (49) </ul>
+                  <ul>Tecla S = D3 (50) </ul>
+                  <ul>Tecla E = D3# (51) </ul>
+                  <ul>Tecla D = E3 (52) </ul>
+                  <ul>Tecla F = F3 (53) </ul>
+                  <ul>Tecla T = F3# (54) </ul>
+                  <ul>Tecla G = G3 (55) </ul>
+                  <ul>Tecla Y = G3# (56) </ul>
+                </li>
+                <li>
+                  <ul>Tecla H = A3 (57) </ul>
+                  <ul>Tecla U = A3# (58) </ul>
+                  <ul>Tecla J = B3 (59) </ul>
+                  <ul>Tecla K = C4 (60) </ul>
+                  <ul>Tecla O = C4# (61) </ul>
+                  <ul>Tecla L = D4 (62) </ul>
+                  <ul>Tecla P = D4# (63) </ul>
+                  <ul>Tecla ; = E4 (64)</ul>
+                </li>
+              </div>
+            </div>
 
-          <div className="card">
-            <h3>Melodia Exemplo</h3>
-            <li>
-              <ul>Siga as letras em sequência apertando nas teclas correspondentes do seu teclado ou utilizando o mouse, para criar uma melodia</ul> 
-              <ul>A -{'>'} S -{'>'} Y -{'>'} H -{'>'} U -{'>'} E -{'>'} W -{'>'} K -{'>'} D -{'>'} S -{'>'} O -{'>'} A</ul> 
-              <ul>Aperte o botão <strong>Tocar</strong> e escute a melodia</ul> 
-              <ul>Agora aperte o botão <strong>Recomeçar</strong> e use a sua criatividade para criar a sua propria melodia ou modificar essa! 😀🎹</ul>
-            </li>
+            <div className="card">
+              <h3>Melodia Exemplo</h3>
+              <li>
+                <ul>
+                  Siga as letras em sequência apertando nas teclas
+                  correspondentes do seu teclado ou utilizando o mouse, para
+                  criar uma melodia
+                </ul>
+                <ul>
+                  A -{">"} S -{">"} Y -{">"} H -{">"} U -{">"} E -{">"} W -{">"}{" "}
+                  K -{">"} D -{">"} S -{">"} O -{">"} A
+                </ul>
+                <ul>
+                  Aperte o botão <strong>Tocar</strong> ▶️ e escute a melodia
+                </ul>
+                <ul>
+                  Agora aperte o botão <strong>Recomeçar</strong> 🔁 e use a sua
+                  criatividade para criar a sua propria melodia ou modificar
+                  essa! 😀🎹
+                </ul>
+              </li>
+            </div>
 
-          </div>
-
-          <div className="card">
-            <h3>Créditos</h3>
-            <p>A máquina de criar música foi construída pelo Aluno Almir Crispiniano na disciplina Computação e Música do curso de Ciencia da Computação - UFCG</p>
-            <p>Toda a disciplina foi ministrada pelo Professor Marcelo Barros que também auxiliou na construção do processo criativo com aulas e atividades remotas </p>
-            <Button onClick={() => this.setState({redirect: true})}>Voltar para Tela Principal</Button>
-            {this.state.redirect && (
-          <Navigate to="/" replace={true} />
-        )}
-           
+            <div className="card">
+              <h3>Créditos</h3>
+              <p>
+                A máquina de criar música foi construída pelo Aluno Almir
+                Crispiniano na disciplina Computação e Música do curso de
+                Ciencia da Computação - UFCG
+              </p>
+              <p>
+                Toda a disciplina foi ministrada pelo Professor Marcelo Barros
+                que também auxiliou na construção do processo criativo com aulas
+                e atividades remotas{" "}
+              </p>
+              <Button onClick={() => this.setState({redirect: true})}>
+                Voltar para Tela Principal
+              </Button>
+              {this.state.redirect && <Navigate to="/" replace={true} />}
+            </div>
           </div>
         </div>
-      </div></section>
-      
+      </section>
     );
   }
 }
 
 export default Principal;
-
-
-
